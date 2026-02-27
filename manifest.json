@@ -22,7 +22,7 @@
   "content_scripts": [
     {
       "matches": ["https://docs.google.com/document/*"],
-      "js":      ["src/content.js"],
+      "js":      ["src/content.bundle.js"],
       "css":     ["styles/content.css"],
       "run_at":  "document_idle",
       "type":    "module"
