@@ -1,0 +1,254 @@
+/**
+ * content.css — Injected page styles for ghost text and toolbar
+ *
+ * ─── ISOLATION STRATEGY ──────────────────────────────────────────────────────
+ * All styles are scoped under the `[data-typeahead]` attribute and prefixed
+ * with `ta-` (Typeahead). This prevents ANY collision with Google Docs' CSS.
+ *
+ * We intentionally do NOT use Shadow DOM for the ghost text overlay because:
+ *  1. We need the overlay to inherit Docs' own font metrics (size, family,
+ *     line-height) for pixel-perfect alignment.
+ *  2. Shadow DOM's style isolation would prevent that inheritance.
+ *  3. Our `ta-` namespace is sufficient — Docs never generates class names
+ *     starting with "ta-".
+ *
+ * The floating toolbar DOES use a self-contained style block (no inheritance
+ * needed) so it remains perfectly consistent across all Docs themes.
+ *
+ * All animations use only `transform` and `opacity` — zero layout reflow.
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Ghost Text Overlay
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+#ta-ghost {
+  /* Positioning — fixed to viewport; updated each frame via JS */
+  position: fixed;
+  z-index: 99990;
+  top: 0;
+  left: 0;
+
+  /* Invisible by default */
+  pointer-events: none;
+  user-select: none;
+
+  /* Typography — intentionally inherits nothing; set by JS after measuring */
+  font-style: italic;
+  white-space: pre;
+  color: transparent;
+
+  /* The ghost text colour — achieved via a text-shadow trick so the rendered
+     text doesn't affect layout at all (it has no fill, just shadow fill) */
+  text-shadow: 0 0 0 rgba(100, 100, 120, 0.45);
+
+  /* Smooth entry */
+  opacity: 0;
+  transform: translateY(1px);
+  transition:
+    opacity  150ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 150ms cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Never interfere with Docs' rendering pipeline */
+  will-change: opacity, transform;
+  contain: strict;
+}
+
+#ta-ghost.ta-ghost--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#ta-ghost.ta-ghost--accepting {
+  /* When Tab is pressed: ghost solidifies then disappears */
+  opacity: 0;
+  transform: translateY(-1px);
+  transition:
+    opacity  120ms cubic-bezier(0.4, 0, 1, 1),
+    transform 120ms cubic-bezier(0.4, 0, 1, 1);
+}
+
+/* ── Shimmer loading state ─────────────────────────────────────────────── */
+
+#ta-ghost.ta-ghost--loading {
+  /* Replace text with a shimmering placeholder bar */
+  color: transparent;
+  text-shadow: none;
+  background: linear-gradient(
+    90deg,
+    rgba(100, 100, 120, 0.08) 0%,
+    rgba(100, 100, 120, 0.20) 40%,
+    rgba(100, 100, 120, 0.08) 80%
+  );
+  background-size: 200% 100%;
+  animation: ta-shimmer 1.4s ease-in-out infinite;
+  border-radius: 3px;
+  min-width: 120px;
+  height: 1.1em;
+  display: inline-block;
+}
+
+@keyframes ta-shimmer {
+  0%   { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Floating Mini Toolbar
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+#ta-toolbar {
+  position: fixed;
+  z-index: 99991;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+
+  /* Glass morphism pill — feels native on any background */
+  background: rgba(18, 18, 24, 0.92);
+  backdrop-filter: blur(16px) saturate(1.8);
+  -webkit-backdrop-filter: blur(16px) saturate(1.8);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 999px;
+  padding: 4px 6px;
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.24),
+    0 1px 3px rgba(0, 0, 0, 0.16),
+    0 0 0 0.5px rgba(255,255,255,0.04) inset;
+
+  /* Hidden by default */
+  opacity: 0;
+  transform: translateY(4px) scale(0.97);
+  pointer-events: none;
+  transition:
+    opacity  160ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 160ms cubic-bezier(0.16, 1, 0.3, 1);
+
+  will-change: opacity, transform;
+}
+
+#ta-toolbar.ta-toolbar--visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: all;
+}
+
+/* Toolbar buttons */
+.ta-toolbar__btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(240, 240, 248, 0.85);
+  white-space: nowrap;
+  transition:
+    background 120ms ease,
+    color 120ms ease,
+    transform 120ms ease;
+  -webkit-font-smoothing: antialiased;
+}
+
+.ta-toolbar__btn:hover {
+  background: rgba(255, 255, 255, 0.10);
+  color: #fff;
+}
+
+.ta-toolbar__btn:active {
+  transform: scale(0.96);
+}
+
+.ta-toolbar__btn--primary {
+  background: rgba(91, 94, 244, 0.20);
+  color: rgba(160, 163, 255, 1);
+}
+
+.ta-toolbar__btn--primary:hover {
+  background: rgba(91, 94, 244, 0.32);
+  color: #fff;
+}
+
+.ta-toolbar__btn__icon {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+  opacity: 0.8;
+}
+
+/* Thin divider between button groups */
+.ta-toolbar__sep {
+  width: 1px;
+  height: 16px;
+  background: rgba(255,255,255,0.10);
+  margin: 0 2px;
+  flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Status pip — tiny indicator in top-right of Docs
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+#ta-status-pip {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 99989;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px 6px 8px;
+  background: rgba(18, 18, 24, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 999px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: rgba(180, 180, 196, 0.9);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+  pointer-events: none;
+  -webkit-font-smoothing: antialiased;
+
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 200ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#ta-status-pip.ta-pip--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ta-pip__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(91, 94, 244, 0.8);
+  animation: ta-pip-pulse 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+.ta-pip__dot--loading {
+  background: rgba(245, 158, 11, 0.9);
+  animation: ta-pip-spin 0.8s linear infinite;
+}
+
+@keyframes ta-pip-pulse {
+  0%, 100% { opacity: 1;   transform: scale(1);   }
+  50%       { opacity: 0.5; transform: scale(0.85); }
+}
+
+@keyframes ta-pip-spin {
+  0%   { transform: scale(0.8);  opacity: 0.6; }
+  50%  { transform: scale(1);    opacity: 1;   }
+  100% { transform: scale(0.8);  opacity: 0.6; }
+}

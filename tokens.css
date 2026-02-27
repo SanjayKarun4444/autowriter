@@ -1,0 +1,121 @@
+/**
+ * tokens.css — Design System Foundation
+ *
+ * Every visual value in the product derives from these tokens.
+ * Never hardcode colors, radii, or shadows inline.
+ * Change a token here → change the entire product.
+ *
+ * Philosophy: "Calm technology" — present when needed, invisible otherwise.
+ * Inspired by the restraint of Linear, the warmth of Notion, the precision of Raycast.
+ */
+
+:root {
+  /* ── Color Palette ───────────────────────────────────────────────────── */
+  /* Neutral scale — warm-tinted grey, never pure black */
+  --color-ink-900: #0d0d0f;
+  --color-ink-800: #1a1a1f;
+  --color-ink-700: #2c2c35;
+  --color-ink-600: #44444f;
+  --color-ink-500: #6b6b78;
+  --color-ink-400: #9494a0;
+  --color-ink-300: #b8b8c2;
+  --color-ink-200: #dcdce4;
+  --color-ink-100: #f0f0f4;
+  --color-ink-50:  #f8f8fb;
+
+  /* Brand — a single, confident accent */
+  --color-accent:       #5b5ef4;   /* electric indigo — not purple, not blue */
+  --color-accent-hover: #4a4de8;
+  --color-accent-dim:   rgba(91, 94, 244, 0.12);
+  --color-accent-glow:  rgba(91, 94, 244, 0.25);
+
+  /* Semantic */
+  --color-success:   #22c55e;
+  --color-warning:   #f59e0b;
+  --color-error:     #ef4444;
+  --color-surface:   #ffffff;
+  --color-overlay:   rgba(13, 13, 15, 0.5);
+
+  /* ── Typography ──────────────────────────────────────────────────────── */
+  --font-sans: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", "SF Mono", monospace;
+
+  --text-xs:   11px;
+  --text-sm:   12.5px;
+  --text-base: 14px;
+  --text-md:   15px;
+  --text-lg:   17px;
+  --text-xl:   20px;
+
+  --leading-tight:  1.2;
+  --leading-normal: 1.5;
+  --leading-loose:  1.7;
+
+  --weight-normal:   400;
+  --weight-medium:   500;
+  --weight-semibold: 600;
+  --weight-bold:     700;
+
+  /* ── Spacing (8px grid) ──────────────────────────────────────────────── */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+
+  /* ── Radius ───────────────────────────────────────────────────────────── */
+  --radius-sm:   6px;
+  --radius-md:   10px;
+  --radius-lg:   14px;
+  --radius-xl:   18px;
+  --radius-pill: 999px;
+
+  /* ── Shadows (layered, warm-tinted) ──────────────────────────────────── */
+  --shadow-xs:  0 1px 2px rgba(13, 13, 15, 0.06);
+  --shadow-sm:  0 2px 8px rgba(13, 13, 15, 0.08), 0 1px 2px rgba(13, 13, 15, 0.06);
+  --shadow-md:  0 4px 16px rgba(13, 13, 15, 0.10), 0 2px 4px rgba(13, 13, 15, 0.06);
+  --shadow-lg:  0 8px 32px rgba(13, 13, 15, 0.12), 0 4px 8px rgba(13, 13, 15, 0.06);
+  --shadow-xl:  0 16px 48px rgba(13, 13, 15, 0.14), 0 8px 16px rgba(13, 13, 15, 0.08);
+  --shadow-glow: 0 0 0 3px var(--color-accent-glow);
+
+  /* ── Motion ───────────────────────────────────────────────────────────── */
+  --duration-fast:   120ms;
+  --duration-base:   180ms;
+  --duration-slow:   280ms;
+  --duration-slower: 400ms;
+
+  --ease-out:     cubic-bezier(0.16, 1, 0.3, 1);       /* snappy decelerate */
+  --ease-in:      cubic-bezier(0.4, 0, 1, 1);
+  --ease-bounce:  cubic-bezier(0.34, 1.56, 0.64, 1);   /* slight spring */
+  --ease-smooth:  cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ── Z-index ladder ───────────────────────────────────────────────────── */
+  --z-ghost:   99990;
+  --z-toolbar: 99991;
+  --z-tooltip: 99992;
+  --z-modal:   99993;
+}
+
+/* ── Dark mode overrides ─────────────────────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-surface: #16161a;
+    --color-ink-50:  #1e1e24;
+    --color-ink-100: #252530;
+    --color-ink-200: #32323f;
+    --color-ink-300: #44444f;
+    --color-ink-400: #6b6b78;
+    --color-ink-500: #9494a0;
+    --color-ink-600: #b8b8c2;
+    --color-ink-700: #d0d0d8;
+    --color-ink-800: #e8e8ee;
+    --color-ink-900: #f4f4f8;
+    --shadow-sm:  0 2px 8px rgba(0,0,0,0.24), 0 1px 2px rgba(0,0,0,0.18);
+    --shadow-md:  0 4px 16px rgba(0,0,0,0.28), 0 2px 4px rgba(0,0,0,0.18);
+    --shadow-lg:  0 8px 32px rgba(0,0,0,0.36), 0 4px 8px rgba(0,0,0,0.20);
+    --shadow-xl:  0 16px 48px rgba(0,0,0,0.44), 0 8px 16px rgba(0,0,0,0.24);
+  }
+}

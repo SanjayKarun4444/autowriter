@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Typeahead</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+
+<div class="popup" id="popup">
+
+  <!-- Ambient glow accent -->
+  <div class="popup__ambient" aria-hidden="true"></div>
+
+  <!-- ── Header ─────────────────────────────────────────────────────────── -->
+  <header class="popup__header">
+    <div class="popup__brand">
+      <div class="popup__logo" aria-hidden="true">
+        <svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2 7.5L6 11.5L13 3.5" stroke="white" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <span class="popup__name">Typeahead</span>
+      <span class="popup__version">v1.0</span>
+    </div>
+
+    <div class="status-badge status-badge--disconnected" id="statusBadge"
+         role="status" aria-live="polite">
+      <span class="status-badge__dot"></span>
+      <span class="status-badge__text">No key</span>
+    </div>
+  </header>
+
+  <!-- ── Body ───────────────────────────────────────────────────────────── -->
+  <main class="popup__body" id="popupBody">
+
+    <!-- Master enable/disable -->
+    <label class="master-toggle" for="enableToggle" tabindex="0"
+           role="switch" aria-checked="false">
+      <div class="master-toggle__label">
+        <span class="master-toggle__title">Autocomplete</span>
+        <span class="master-toggle__subtitle">AI suggestions in Google Docs</span>
+      </div>
+      <div class="toggle-switch">
+        <input type="checkbox" id="enableToggle" />
+        <div class="toggle-switch__track"></div>
+        <div class="toggle-switch__thumb"></div>
+      </div>
+    </label>
+
+    <div class="popup__divider"></div>
+
+    <!-- Model selector -->
+    <div class="form-group form-group--model" id="modelGroup">
+      <div class="form-group__label">
+        <span>Model</span>
+      </div>
+
+      <div class="custom-select" id="modelSelect">
+        <div class="custom-select__trigger" id="selectTrigger"
+             role="combobox" tabindex="0" aria-haspopup="listbox"
+             aria-expanded="false">
+          <div class="custom-select__left">
+            <div class="custom-select__icon" id="selectedIcon">🤖</div>
+            <div>
+              <div class="custom-select__text" id="selectedName">Choose a model</div>
+            </div>
+          </div>
+          <svg class="custom-select__chevron" id="selectChevron"
+               width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M3 5L7 9L11 5" stroke="currentColor" stroke-width="1.5"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+
+        <div class="custom-select__dropdown" id="selectDropdown"
+             role="listbox" style="display:none">
+          <div class="custom-select__option" data-value="anthropic"
+               data-icon="🟣" data-name="Claude (Anthropic)"
+               data-desc="claude-haiku-4-5 · Fast & smart"
+               role="option" tabindex="-1">
+            <div class="custom-select__option-icon"
+                 style="background:rgba(139,92,246,0.12)">🟣</div>
+            <div class="custom-select__option-text">
+              <div class="custom-select__option-name">Claude (Anthropic)</div>
+              <div class="custom-select__option-desc">claude-haiku-4-5 · Fast & smart</div>
+            </div>
+            <svg class="custom-select__option-check" width="14" height="14"
+                 viewBox="0 0 14 14" fill="none">
+              <path d="M2.5 7L5.5 10L11.5 4" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+
+          <div class="custom-select__option" data-value="openai"
+               data-icon="⚪" data-name="GPT-4o mini"
+               data-desc="OpenAI · Reliable & fast"
+               role="option" tabindex="-1">
+            <div class="custom-select__option-icon"
+                 style="background:rgba(16,163,127,0.12)">⚪</div>
+            <div class="custom-select__option-text">
+              <div class="custom-select__option-name">GPT-4o mini</div>
+              <div class="custom-select__option-desc">OpenAI · Reliable & fast</div>
+            </div>
+            <svg class="custom-select__option-check" width="14" height="14"
+                 viewBox="0 0 14 14" fill="none">
+              <path d="M2.5 7L5.5 10L11.5 4" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+
+          <div class="custom-select__option" data-value="local"
+               data-icon="💻" data-name="Local LLM"
+               data-desc="Ollama / LM Studio · Private"
+               role="option" tabindex="-1">
+            <div class="custom-select__option-icon"
+                 style="background:rgba(245,158,11,0.12)">💻</div>
+            <div class="custom-select__option-text">
+              <div class="custom-select__option-name">Local LLM</div>
+              <div class="custom-select__option-desc">Ollama / LM Studio · Private</div>
+            </div>
+            <svg class="custom-select__option-check" width="14" height="14"
+                 viewBox="0 0 14 14" fill="none">
+              <path d="M2.5 7L5.5 10L11.5 4" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+
+          <div class="custom-select__option" data-value="mock"
+               data-icon="🧪" data-name="Demo Mode"
+               data-desc="No API key needed · Testing only"
+               role="option" tabindex="-1">
+            <div class="custom-select__option-icon"
+                 style="background:rgba(99,102,241,0.12)">🧪</div>
+            <div class="custom-select__option-text">
+              <div class="custom-select__option-name">Demo Mode</div>
+              <div class="custom-select__option-desc">No API key needed · Testing only</div>
+            </div>
+            <svg class="custom-select__option-check" width="14" height="14"
+                 viewBox="0 0 14 14" fill="none">
+              <path d="M2.5 7L5.5 10L11.5 4" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- API Key -->
+    <div class="form-group">
+      <div class="form-group__label">
+        <span>API Key</span>
+        <span class="form-group__label-badge" id="keyBadge" style="display:none">
+          Saved ✓
+        </span>
+      </div>
+
+      <div class="key-field">
+        <div class="key-field__input-wrap">
+          <input
+            type="password"
+            class="key-field__input"
+            id="apiKeyInput"
+            placeholder="Paste your API key…"
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <button class="key-field__eye" id="eyeBtn"
+                  aria-label="Show/hide key" tabindex="-1">
+            <svg id="eyeIcon" width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M1 7C1 7 3.5 3 7 3C10.5 3 13 7 13 7C13 7 10.5 11 7 11C3.5 11 1 7 1 7Z"
+                    stroke="currentColor" stroke-width="1.3"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="7" cy="7" r="1.5" stroke="currentColor" stroke-width="1.3"/>
+            </svg>
+          </button>
+        </div>
+        <button class="btn--save" id="saveBtn" disabled>Save</button>
+      </div>
+    </div>
+
+    <div class="popup__divider"></div>
+
+    <!-- Keyboard shortcuts -->
+    <div class="shortcuts-card">
+      <div class="shortcuts-card__title">Shortcuts</div>
+
+      <div class="shortcut-row">
+        <span class="shortcut-row__action">Accept suggestion</span>
+        <kbd class="kbd">Tab</kbd>
+      </div>
+      <div class="shortcut-row">
+        <span class="shortcut-row__action">Dismiss</span>
+        <kbd class="kbd">Esc</kbd>
+      </div>
+      <div class="shortcut-row">
+        <span class="shortcut-row__action">Regenerate</span>
+        <span class="shortcut-row__action" style="font-style:italic">Keep typing…</span>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ── Footer ─────────────────────────────────────────────────────────── -->
+  <footer class="popup__footer">
+    <span class="footer__brand">by <span>Typeahead</span></span>
+    <div class="footer__links">
+      <span class="footer__link" id="docsLink">Docs</span>
+      <span class="footer__link" id="feedbackLink">Feedback</span>
+    </div>
+  </footer>
+
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast" role="alert" aria-live="assertive"></div>
+
+<script src="popup.js"></script>
+</body>
+</html>
