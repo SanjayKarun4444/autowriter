@@ -2,30 +2,21 @@
   "manifest_version": 3,
   "name": "Typeahead — AI Autocomplete for Google Docs",
   "short_name": "Typeahead",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Smart Compose-style AI autocomplete for Google Docs. Accept with Tab, dismiss with Esc.",
 
-  "permissions": [
-    "storage",
-    "activeTab"
-  ],
-
-  "host_permissions": [
-    "https://docs.google.com/*"
-  ],
+  "permissions": ["storage", "activeTab"],
+  "host_permissions": ["https://docs.google.com/*"],
 
   "background": {
-    "service_worker": "src/background.js",
-    "type": "module"
+    "service_worker": "src/background.js"
   },
 
   "content_scripts": [
     {
       "matches": ["https://docs.google.com/document/*"],
-      "js":      ["src/content.bundle.js"],
-      "css":     ["styles/content.css"],
-      "run_at":  "document_idle",
-      "type":    "module"
+      "js": ["src/content.bundle.js"],
+      "run_at": "document_idle"
     }
   ],
 
@@ -50,7 +41,7 @@
   "web_accessible_resources": [
     {
       "resources": ["styles/content.css", "styles/tokens.css"],
-      "matches":   ["https://docs.google.com/*"]
+      "matches": ["https://docs.google.com/*"]
     }
   ]
 }
