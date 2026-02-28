@@ -2,10 +2,10 @@
   "manifest_version": 3,
   "name": "Typeahead — AI Autocomplete for Google Docs",
   "short_name": "Typeahead",
-  "version": "1.1.0",
+  "version": "3.0.0",
   "description": "Smart Compose-style AI autocomplete for Google Docs. Accept with Tab, dismiss with Esc.",
 
-  "permissions": ["storage", "activeTab"],
+  "permissions": ["storage", "activeTab", "clipboardRead", "clipboardWrite"],
   "host_permissions": ["https://docs.google.com/*"],
 
   "background": {

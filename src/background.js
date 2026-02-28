@@ -162,3 +162,7 @@ chrome.runtime.onInstalled.addListener(function(details) {
     console.log("[Typeahead BG] Installed with defaults");
   }
 });
+// Add this to your background.js
+self.addEventListener('activate', (event) => {
+  event.waitUntil(self.registration.navigationPreload?.disable() ?? Promise.resolve());
+});
