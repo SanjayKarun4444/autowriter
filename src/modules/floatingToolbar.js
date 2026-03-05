@@ -7,7 +7,8 @@
  *
  * Never pollutes Google Docs' DOM — the toolbar is appended to <body>
  * and positioned via fixed coords derived from Selection.getRangeAt().
- */
+ 
+*/
 
 export class FloatingToolbar {
 
